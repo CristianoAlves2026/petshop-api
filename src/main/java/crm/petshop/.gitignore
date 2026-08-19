@@ -1,0 +1,16 @@
+# Pasta e arquivos gerados pelo Maven
+target/
+*.jar
+*.war
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Pasta e configurações do VS Code (opcional)
+.vscode/
+
+# Arquivos temporários
+*.iml
+*.ipr
+*.iws

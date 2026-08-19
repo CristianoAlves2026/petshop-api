@@ -1,0 +1,9 @@
+﻿{
+  "nome": "Joao da Silva",
+  "cpf": "123.456.789-09",
+  "telefone": "28999991234",
+  "email": "joao@email.com",
+  "comoConheceu": "Internet",
+  "aceitaComunicacao": true,
+  "observacoes": "Cliente de teste"
+}
