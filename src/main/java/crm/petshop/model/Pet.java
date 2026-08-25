@@ -1,12 +1,10 @@
 package crm.petshop.model;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 import java.time.LocalDate;
-import crm.petshop.model.Especie;
 
 @Data
 @Entity
@@ -26,9 +24,13 @@ public class Pet {
     @Column(name = "id_raca")
     private Long idRaca;
 
+    // ✅ CAMPO COM O NÚMERO DIRETO — É ESSE QUE VAMOS USAR!
+    @Column(name = "id_especie", insertable = false, updatable = false)
+    private Long idEspecie;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_especie")
-    private Especie especie;  // ✅ NOVO CAMPO
+    private Especie especie;
 
     @Column(length = 10)
     private String sexo;

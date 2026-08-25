@@ -55,4 +55,39 @@ public class PetController {
     public List<Pet> listarPorTutor(@PathVariable Long idTutor) {
         return petService.listarPorTutor(idTutor);
     }
+
+        // ✅ ATUALIZAR PET
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @Valid @RequestBody PetDTO dto) {
+        try {
+            Pet pet = petService.atualizar(id, dto);
+            return ResponseEntity.ok(Map.of(
+                "mensagem", "✅ Pet atualizado com sucesso!",
+                "id", pet.getId()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "erro", "❌ Erro ao atualizar: " + e.getMessage()
+            ));
+        }
+    }
+
+    // ✅ EXCLUIR PET
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> excluir(@PathVariable Long id) {
+        try {
+            petService.excluir(id);
+            return ResponseEntity.ok(Map.of(
+                "mensagem", "✅ Pet excluído com sucesso!"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "erro", "❌ Erro ao excluir: " + e.getMessage()
+            ));
+        }
+    }
+
+
+
+
 }
