@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Firebase Service Account - NUNCA enviar para o GitHub
+src/main/resources/*firebase-adminsdk*.json

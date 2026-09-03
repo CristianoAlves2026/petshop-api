@@ -37,4 +37,9 @@ public class Tutor {
 
     @Column(length = 2)
     private String estado;
+
+    // ✅ Token do Firebase Cloud Messaging (para notificações)
+    @Column(name = "token_fcm")
+    private String tokenFcm;
+
 }

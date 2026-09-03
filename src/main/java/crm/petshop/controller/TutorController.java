@@ -107,5 +107,23 @@ public class TutorController {
         });
         return ResponseEntity.badRequest().body(mensagem.toString().trim());
     }
+
+    // ✅ RECEBE E GUARDA O TOKEN DE NOTIFICAÇÃO
+    @PostMapping("/{id}/token")
+    public ResponseEntity<?> salvarToken(@PathVariable Long id, @RequestBody String token) {
+        try {
+            Optional<Tutor> tutor = tutorRepository.findById(id);
+            if (tutor.isEmpty()) {
+                return ResponseEntity.notFound().build();
+        }
+
+            tutor.get().setTokenFcm(token);
+            tutorRepository.save(tutor.get());
+
+            return ResponseEntity.ok("✅ Token salvo com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("❌ Erro: " + e.getMessage());
+        }
+    }
     
 }
