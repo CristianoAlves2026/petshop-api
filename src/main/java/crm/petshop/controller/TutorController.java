@@ -3,6 +3,7 @@ package crm.petshop.controller;
 
 import crm.petshop.dto.TutorDTO;
 import crm.petshop.model.Tutor;
+import crm.petshop.service.NotificacaoService;
 import crm.petshop.service.TutorService;
 import crm.petshop.repository.CidadeRepository;
 import crm.petshop.repository.TutorRepository;
@@ -30,6 +31,7 @@ public class TutorController {
     private final CidadeRepository cidadeRepository;
     private final TutorRepository tutorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final NotificacaoService notificacaoService;
 
 
     // ✅ LOGIN — AGORA RETORNA id + nome
@@ -121,6 +123,29 @@ public class TutorController {
             tutorRepository.save(tutor.get());
 
             return ResponseEntity.ok("✅ Token salvo com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("❌ Erro: " + e.getMessage());
+        }
+    }
+
+        // ✅ TESTE — ENVIA NOTIFICAÇÃO PARA UM TUTOR
+    @GetMapping("/{id}/notificar-teste")
+    public ResponseEntity<?> notificarTeste(@PathVariable Long id) {
+        try {
+            // 1. Busca o tutor no banco
+            Optional<Tutor> tutor = tutorRepository.findById(id);
+            if (tutor.isEmpty() || tutor.get().getTokenFcm() == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // 2. Pega o serviço de notificação e ENVIA
+            String resultado = notificacaoService.enviar(
+                tutor.get().getTokenFcm(),
+                "🔔 Teste de Notificação",
+                "Olá! Notificação funcionando perfeitamente! 🎉"
+            );
+
+            return ResponseEntity.ok(resultado);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("❌ Erro: " + e.getMessage());
         }
