@@ -111,22 +111,27 @@ public class TutorController {
     }
 
     // ✅ RECEBE E GUARDA O TOKEN DE NOTIFICAÇÃO
-    @PostMapping("/{id}/token")
-    public ResponseEntity<?> salvarToken(@PathVariable Long id, @RequestBody String token) {
-        try {
-            Optional<Tutor> tutor = tutorRepository.findById(id);
-            if (tutor.isEmpty()) {
-                return ResponseEntity.notFound().build();
+@PostMapping("/{id}/token")
+public ResponseEntity<?> salvarToken(@PathVariable Long id, @RequestBody String token) {
+    try {
+        Optional<Tutor> tutor = tutorRepository.findById(id);
+        if (tutor.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-
-            tutor.get().setTokenFcm(token);
-            tutorRepository.save(tutor.get());
-
-            return ResponseEntity.ok("✅ Token salvo com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("❌ Erro: " + e.getMessage());
+        
+        // ✅ LIMPA AS ASPAS SE TIVER NO COMEÇO E NO FIM
+        String tokenLimpo = token.trim();
+        if (tokenLimpo.startsWith("\"") && tokenLimpo.endsWith("\"")) {
+            tokenLimpo = tokenLimpo.substring(1, tokenLimpo.length() - 1);
         }
+        
+        tutor.get().setTokenFcm(tokenLimpo); // ✅ SALVA SEM ASPAS!
+        tutorRepository.save(tutor.get());
+        return ResponseEntity.ok("✅ Token salvo com sucesso!");
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body("❌ Erro: " + e.getMessage());
     }
+}
 
         // ✅ TESTE — ENVIA NOTIFICAÇÃO PARA UM TUTOR
     @GetMapping("/{id}/notificar-teste")
