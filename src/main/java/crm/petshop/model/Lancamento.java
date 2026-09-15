@@ -27,8 +27,8 @@ public class Lancamento {
     @JoinColumn(name = "id_produto", insertable = false, updatable = false)
     private Produto produto;
 
-    @Column(name = "id_petshops")
-    private Integer idPetshops;
+    @Column(name = "id_petshop")
+    private Integer idPetshop;
 
     @Column(name = "data")
     private LocalDate data;

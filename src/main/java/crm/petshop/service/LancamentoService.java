@@ -27,7 +27,7 @@ public class LancamentoService {
         Lancamento lancamento = new Lancamento();
         lancamento.setIdPet(dto.getIdPet());
         lancamento.setIdProduto(dto.getIdProduto());
-        lancamento.setIdPetshops(dto.getIdPetshops());
+        lancamento.setIdPetshop(dto.getIdPetshop());
         lancamento.setData(dto.getData());
         lancamento.setObservacao(dto.getObservacao());
         lancamento.setRepetir(dto.getRepetir());
@@ -58,7 +58,7 @@ public class LancamentoService {
                 .orElseThrow(() -> new RuntimeException("❌ Lançamento não encontrado"));
         lancamento.setIdPet(dto.getIdPet());
         lancamento.setIdProduto(dto.getIdProduto());
-        lancamento.setIdPetshops(dto.getIdPetshops());
+        lancamento.setIdPetshop(dto.getIdPetshop());
         lancamento.setData(dto.getData());
         lancamento.setObservacao(dto.getObservacao());
         lancamento.setRepetir(dto.getRepetir());

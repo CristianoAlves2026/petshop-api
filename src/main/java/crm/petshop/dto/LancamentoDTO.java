@@ -16,7 +16,7 @@ public class LancamentoDTO {
     @NotNull(message = "Produto é obrigatório")
     private Long idProduto;
 
-    private Integer idPetshops; // ✅ PODE SER NULO
+    private Integer idPetshop; // ✅ PODE SER NULO
 
     @NotNull(message = "Data é obrigatória")
     private LocalDate data;

@@ -10,6 +10,8 @@ public class PetDTO {
 
     private Long id;
 
+    private Long idPetshop;
+    
     @NotBlank(message = "Nome é obrigatório")
     private String nome;
 

@@ -43,18 +43,20 @@ public class PetService {
         pet.setFoto(dto.getFoto());
         pet.setObservacoes(dto.getObservacoes());
         pet.setIdTutor(dto.getIdTutor());
+         pet.setIdPetshop(dto.getIdPetshop()); // ✅ SALVA O PETSHOP NO CADASTRO TAMBÉM
         return petRepository.save(pet);
     }
 
     // ✅ ATUALIZAR PET
+        // ✅ ATUALIZAR PET — SEM APAGAR A FOTO
     public Pet atualizar(Long id, PetDTO dto) {
         Pet pet = petRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("❌ Pet não encontrado"));
-
+        
         pet.setNome(dto.getNome());
         pet.setNascimento(dto.getNascimento());
         pet.setIdRaca(dto.getIdRaca());
-
+        
         // ✅ ATUALIZA ESPÉCIE
         if (dto.getIdEspecie() != null) {
             Especie especie = especieRepository.findById(dto.getIdEspecie())
@@ -63,23 +65,21 @@ public class PetService {
         } else {
             pet.setEspecie(null);
         }
-
+        
         pet.setSexo(dto.getSexo());
         pet.setCastrado(dto.getCastrado());
         pet.setFalecido(dto.getFalecido());
-        pet.setFoto(dto.getFoto());
+        
+        // ✅ SÓ ALTERA A FOTO SE VIER UMA NOVA — SENÃO MANTÉM A ANTIGA!
+        if (dto.getFoto() != null && !dto.getFoto().isBlank()) {
+            pet.setFoto(dto.getFoto());
+        }
+        
         pet.setObservacoes(dto.getObservacoes());
         pet.setIdTutor(dto.getIdTutor());
-
+        pet.setIdPetshop(dto.getIdPetshop()); // ✅ SALVA O ID DO PETSHOP
+        
         return petRepository.save(pet);
-    }
-
-    // ✅ EXCLUIR PET
-    public void excluir(Long id) {
-        if (!petRepository.existsById(id)) {
-            throw new RuntimeException("❌ Pet não encontrado");
-        }
-        petRepository.deleteById(id);
     }
 
     // ✅ LISTAR PETS DO TUTOR
@@ -98,4 +98,14 @@ public class PetService {
         );
         return upload.get("secure_url").toString();
     }
+
+
+     // ✅ EXCLUIR PET
+    public void excluir(Long id) {
+        if (!petRepository.existsById(id)) {
+            throw new RuntimeException("❌ Pet não encontrado");
+        }
+        petRepository.deleteById(id);
+    }
+
 }

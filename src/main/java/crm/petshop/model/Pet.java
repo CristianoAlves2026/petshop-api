@@ -15,6 +15,10 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ✅ CAMPO idPetshop — SEM chave estrangeira forçada
+    @Column(name = "id_petshop")
+    private Long idPetshop;
+    
     @Column(nullable = false, length = 120)
     private String nome;
 
