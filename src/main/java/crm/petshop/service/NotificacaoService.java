@@ -136,8 +136,10 @@ public class NotificacaoService {
     Tutor tutor = tutorRepository.findById(pet.getIdTutor()).orElse(null);
     if (tutor == null || tutor.getTokenFcm() == null || tutor.getTokenFcm().isBlank()) return;
     
-    // ✅ TÍTULO NOVO: 🐾 + Olá NomeDoTutor!!
-    String tituloNovo = "🐾 Olá " + tutor.getNome() + "!!";
+    
+    // ✅ PEGA SÓ O PRIMEIRO NOME
+    String primeiroNome = tutor.getNome().split(" ")[0];
+    String tituloNovo = "🐾 Olá " + primeiroNome + "!!";
     
     try {
         Message mensagem = Message.builder()
