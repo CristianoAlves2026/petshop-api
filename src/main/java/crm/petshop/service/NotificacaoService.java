@@ -131,28 +131,30 @@ public class NotificacaoService {
        
 
     private void enviarComDados(Lancamento lanc, String titulo, String corpo) {
-        Pet pet = petRepository.findById(lanc.getIdPet()).orElse(null);
-        if (pet == null) return;
-        Tutor tutor = tutorRepository.findById(pet.getIdTutor()).orElse(null);
-        if (tutor == null || tutor.getTokenFcm() == null || tutor.getTokenFcm().isBlank()) return;
-
-        try {
-            Message mensagem = Message.builder()
-                .setNotification(Notification.builder()
-                    .setTitle(titulo)
-                    .setBody(corpo)
-                    .build())
-                .putData("click_action", "FLUTTER_NOTIFICATION_CLICK")
-                .putData("idLancamento", lanc.getId().toString())
-                .putData("idPet", lanc.getIdPet().toString())
-                .setToken(tutor.getTokenFcm())
-                .build();
-
-            FirebaseMessaging.getInstance().sendAsync(mensagem).get();
-            System.out.println("✅ Notificação enviada — Lançamento: " + lanc.getId());
-        } catch (InterruptedException | ExecutionException e) {
-            System.err.println("❌ Erro ao enviar lançamento " + lanc.getId() + ": " + e.getMessage());
-            Thread.currentThread().interrupt();
-        }
+    Pet pet = petRepository.findById(lanc.getIdPet()).orElse(null);
+    if (pet == null) return;
+    Tutor tutor = tutorRepository.findById(pet.getIdTutor()).orElse(null);
+    if (tutor == null || tutor.getTokenFcm() == null || tutor.getTokenFcm().isBlank()) return;
+    
+    // ✅ TÍTULO NOVO: 🐾 + Olá NomeDoTutor!!
+    String tituloNovo = "🐾 Olá " + tutor.getNome() + "!!";
+    
+    try {
+        Message mensagem = Message.builder()
+            .setNotification(Notification.builder()
+                .setTitle(tituloNovo)        // ✅ Novo título personalizado
+                .setBody(corpo)              // ✅ Mensagem continua igual
+                .build())
+            .putData("click_action", "FLUTTER_NOTIFICATION_CLICK")
+            .putData("idLancamento", lanc.getId().toString())
+            .putData("idPet", lanc.getIdPet().toString())
+            .setToken(tutor.getTokenFcm())
+            .build();
+        FirebaseMessaging.getInstance().sendAsync(mensagem).get();
+        System.out.println("✅ Notificação enviada — Lançamento: " + lanc.getId() + " → Para: " + tutor.getNome());
+    } catch (InterruptedException | ExecutionException e) {
+        System.err.println("❌ Erro ao enviar lançamento " + lanc.getId() + ": " + e.getMessage());
+        Thread.currentThread().interrupt();
     }
+}
 }
