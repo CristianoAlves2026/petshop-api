@@ -10,7 +10,7 @@ public class NotificacaoAgendador {
     private final NotificacaoService notificacaoService;
 
     // ✅ TESTE — Todos os dias às 15:30h
-    @Scheduled(cron = "0 30 15 * * ?")
+    @Scheduled(cron = "0 45 15 * * ?")
     public void executarVerificacaoDiaria() {
         System.out.println("🔔 Iniciando verificação de lembretes às 15:30h...");
         notificacaoService.verificarEEnviarLembretes();
