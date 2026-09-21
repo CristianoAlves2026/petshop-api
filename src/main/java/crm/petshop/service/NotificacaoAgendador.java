@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class NotificacaoAgendador {
-
     private final NotificacaoService notificacaoService;
 
-    // ✅ TODOS OS DIAS ÀS 12:00h (horário do servidor)
-    @Scheduled(cron = "0 0 12 * * ?")
+    // ✅ TESTE — Todos os dias às 15:30h
+    @Scheduled(cron = "0 30 15 * * ?")
     public void executarVerificacaoDiaria() {
-        System.out.println("🔔 Iniciando verificação de lembretes às 12:00h...");
+        System.out.println("🔔 Iniciando verificação de lembretes às 15:30h...");
         notificacaoService.verificarEEnviarLembretes();
         System.out.println("✅ Verificação concluída!");
     }
