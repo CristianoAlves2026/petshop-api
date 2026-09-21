@@ -17,4 +17,8 @@ public class Produto {
 
     @Column(nullable = false, length = 50)
     private String descricao;
+
+    @Column(name = "frase", length = 255)
+    private String frase;
+
 }

@@ -3,6 +3,7 @@ package crm.petshop.controller;
 import crm.petshop.dto.LancamentoDTO;
 import crm.petshop.model.Lancamento;
 import crm.petshop.service.LancamentoService;
+import crm.petshop.service.NotificacaoService; // ✅ FALTAVA
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class LancamentoController {
 
     private final LancamentoService lancamentoService;
+    private final NotificacaoService notificacaoService; // ✅ FALTAVA
 
     // ✅ SALVAR LANÇAMENTO
     @PostMapping
@@ -41,9 +43,9 @@ public class LancamentoController {
     @PutMapping("/{id}/ignorar")
     public ResponseEntity<?> ignorar(@PathVariable Long id) {
         try {
-            Lancamento lancamento = lancamentoService.buscarPorId(id); // ✅ RETORNA DIRETO, SEM Optional
+            Lancamento lancamento = lancamentoService.buscarPorId(id);
             lancamento.setStatus("IGNORADO");
-            lancamentoService.salvarEntidade(lancamento); // ✅ NOVO MÉTODO
+            lancamentoService.salvarEntidade(lancamento);
             return ResponseEntity.ok().body(Map.of("mensagem", "Ignorado com sucesso"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
@@ -72,7 +74,7 @@ public class LancamentoController {
         }
     }
 
-    // ✅ ENVIAR FOTO — IGUAL AO DE PET!
+    // ✅ ENVIAR FOTO
     @PostMapping("/foto")
     public ResponseEntity<?> uploadFoto(@RequestParam("arquivo") MultipartFile arquivo) {
         try {
@@ -81,5 +83,12 @@ public class LancamentoController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("erro", e.getMessage()));
         }
+    }
+
+    // ✅ ENDPOINT PARA TESTE — DISPARA AGORA MESMO
+    @PostMapping("/verificar-lembretes")
+    public ResponseEntity<String> verificarAgora() {
+        notificacaoService.verificarEEnviarLembretes();
+        return ResponseEntity.ok("✅ Verificação executada!");
     }
 }

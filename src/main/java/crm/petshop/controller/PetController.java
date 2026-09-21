@@ -87,7 +87,13 @@ public class PetController {
         }
     }
 
-
+    // ✅ BUSCAR UM PET PELO ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Pet> buscarPorId(@PathVariable Long id) {
+        return petService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
 
 }

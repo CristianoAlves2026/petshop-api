@@ -108,4 +108,9 @@ public class PetService {
         petRepository.deleteById(id);
     }
 
+        // ✅ BUSCAR PET POR ID
+    public java.util.Optional<Pet> buscarPorId(Long id) {
+        return petRepository.findById(id);
+    }
+
 }
