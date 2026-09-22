@@ -136,24 +136,42 @@ public class NotificacaoService {
     Tutor tutor = tutorRepository.findById(pet.getIdTutor()).orElse(null);
     if (tutor == null || tutor.getTokenFcm() == null || tutor.getTokenFcm().isBlank()) return;
     
-    
-    // ✅ PEGA SÓ O PRIMEIRO NOME
+    // ✅ PEGA SÓ O PRIMEIRO NOME — mantive igual
     String primeiroNome = tutor.getNome().split(" ")[0];
     String tituloNovo = "🐾 Olá " + primeiroNome + "!!";
     
+// ✅ NOVA PARTE: IDENTIFICAR CATEGORIA
+// ✅ ID_PRODUTO = CÓDIGO DA CATEGORIA
+String categoria = "outros"; // padrão
+if (lanc.getProduto() != null && lanc.getProduto().getIdProduto() != null) {
+    Integer idCategoria = lanc.getProduto().getIdProduto();
+    
+    if (idCategoria == 1) {
+        categoria = "vacinas";
+    } else if (idCategoria == 2) {
+        categoria = "alimentacao";
+    } else if (idCategoria == 3) {
+        categoria = "saude";
+    } else if (idCategoria == 4) {
+        categoria = "higiene";
+    } else {
+        categoria = "outros"; // idCategoria == 5 ou qualquer outro
+    }
+}    
     try {
         Message mensagem = Message.builder()
             .setNotification(Notification.builder()
-                .setTitle(tituloNovo)        // ✅ Novo título personalizado
-                .setBody(corpo)              // ✅ Mensagem continua igual
+                .setTitle(tituloNovo)
+                .setBody(corpo)
                 .build())
             .putData("click_action", "FLUTTER_NOTIFICATION_CLICK")
             .putData("idLancamento", lanc.getId().toString())
             .putData("idPet", lanc.getIdPet().toString())
+            .putData("categoria", categoria) // ✅ ENVIA A CATEGORIA
             .setToken(tutor.getTokenFcm())
             .build();
         FirebaseMessaging.getInstance().sendAsync(mensagem).get();
-        System.out.println("✅ Notificação enviada — Lançamento: " + lanc.getId() + " → Para: " + tutor.getNome());
+        System.out.println("✅ Notificação enviada — Lançamento: " + lanc.getId() + " | Categoria: " + categoria + " → Para: " + primeiroNome);
     } catch (InterruptedException | ExecutionException e) {
         System.err.println("❌ Erro ao enviar lançamento " + lanc.getId() + ": " + e.getMessage());
         Thread.currentThread().interrupt();
